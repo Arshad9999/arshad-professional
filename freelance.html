@@ -1,54 +1,58 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Freelance design and website work by Mohammad Arshad Siddiqui.">
-  <meta name="theme-color" content="#ffffff">
-  <title>Freelance Work — Arshad Siddiqui</title>
+  <meta name="theme-color" content="#111219">
+  <meta name="description" content="Services, indicative pricing and booking terms for freelance projects with Arshad Siddiqui.">
+  <title>Freelance services — Arshad Siddiqui</title>
+  <link rel="icon" href="assets/icon.png">
   <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
 </head>
-<body>
+<body class="freelance-page" id="top">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site-header">
-    <a class="wordmark" href="index.html" aria-label="Arshad Siddiqui, home">ARSHAD<span>.</span></a>
-    <nav aria-label="Main navigation"><a href="index.html">Home</a><a href="#services">What I create</a><a href="index.html#contact">Contact <span>↗</span></a></nav>
+  <header class="masthead">
+    <div class="wrap mast-inner">
+      <a class="brand" href="index.html" aria-label="Arshad Siddiqui, home"><span class="brand-mark" aria-hidden="true">as</span> Arshad Siddiqui</a>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="primary-nav" hidden>Menu <span class="hamburger" aria-hidden="true"></span></button>
+      <nav id="primary-nav" aria-label="Main navigation">
+        <a href="index.html#work">Work</a>
+        <a href="index.html#research">Research</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="freelance.html" aria-current="page">Freelance</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#contact" class="nav-contact">Contact <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
   </header>
   <main id="main">
-    <section class="freelance-hero section">
-      <p class="eyebrow"><span class="dot"></span> FREELANCE / DESIGN &amp; WEB</p>
-      <h1>IDEAS MADE<br><span>PERSONAL.</span></h1>
-      <p>Thoughtful design and websites for professionals, individuals and businesses.</p>
-      <a class="button" href="#services">EXPLORE MY WORK <span aria-hidden="true">↓</span></a>
+    <section class="wrap sub-hero"><h1>Freelance</h1><p class="lead">I create websites, print materials and professional documents for individuals and small businesses.</p>
+      <div class="actions"><a class="button primary" href="#services">View services <span aria-hidden="true">↓</span></a><a class="button" href="#booking">Request a booking <span aria-hidden="true">→</span></a></div>
     </section>
-    <section class="freelance-services section" id="services">
-      <div class="section-label"><span>01 / WHAT I CREATE</span><span>FREELANCE WORK</span></div>
-      <div class="section-heading"><h2>DESIGNED TO<br><em>MAKE AN IMPACT.</em></h2><p>Creative work across print, professional materials and digital experiences.</p></div>
-      <div class="service-grid">
-        <article><span>01 / PROFESSIONAL</span><h3>RESUME<br>CREATION</h3><p>Clear, polished resumes to help professionals present their experience.</p><p class="service-price">FROM ₹500</p></article>
-        <article><span>02 / PRINT &amp; BRAND</span><h3>PROFESSIONAL &amp;<br>BUSINESS CARDS</h3><p>Personal and business cards designed to make a memorable introduction.</p><p class="service-price">FROM ₹500</p></article>
-        <article><span>03 / DESIGN</span><h3>CUSTOM<br>TEMPLATES</h3><p>Practical, reusable visual materials for individuals and businesses.</p><p class="service-price">FROM ₹400</p></article>
-        <article><span>04 / CREATIVE</span><h3>SALON POSTERS<br>&amp; WALL DESIGNS</h3><p>Promotional and wall designs created for salon spaces.</p><p class="service-price">FROM ₹400</p></article>
-        <article><span>05 / DIGITAL</span><h3>PERSONAL<br>WEBSITES</h3><p>A space to share your work, story and experience online.</p><p class="service-price">₹2,000 – ₹3,000 <small>FOR BASIC PROJECTS</small></p></article>
-        <article><span>06 / DIGITAL</span><h3>BUSINESS<br>WEBSITES</h3><p>Websites that give businesses a place to be discovered online.</p><p class="service-price">₹3,000 – ₹7,000 <small>FOR BASIC PROJECTS</small></p></article>
+    <section id="services" class="wrap sub-section"><div class="split-heading"><h2>Services &amp; pricing</h2><p>My day-to-day work with Zeva Makeup Studio is described in <a href="index.html#experience">Experience</a>.</p></div>
+      <div class="service-list">
+          <div class="service"><div><h3>Résumés</h3><p>A structured résumé that brings your experience and skills into focus.</p></div><strong>From ₹500</strong></div>
+          <div class="service"><div><h3>Professional &amp; business cards</h3><p>Contact cards for individuals, independent professionals and businesses.</p></div><strong>From ₹500</strong></div>
+          <div class="service"><div><h3>Custom templates</h3><p>Reusable layouts for documents and everyday business materials.</p></div><strong>From ₹400</strong></div>
+          <div class="service"><div><h3>Salon posters &amp; wall designs</h3><p>Promotional posters and wall designs for salon spaces.</p></div><strong>From ₹400</strong></div>
+          <div class="service"><div><h3>Personal websites</h3><p>A basic site for a portfolio, profile or personal project.</p></div><strong>₹2,000 – ₹3,000</strong></div>
+          <div class="service"><div><h3>Business websites</h3><p>A basic site that presents your services and gives customers a way to enquire.</p></div><strong>₹3,000 – ₹7,000</strong></div>
       </div>
-      <p class="pricing-note">Prices are indicative and depend on the brief, complexity and revisions. Custom projects are quoted on request; printing, domain, hosting and ongoing maintenance can be quoted separately if needed.</p>
-      <div class="samples-note"><p class="project-type">SELECTED EXAMPLES</p><h3>MORE WORK COMING SOON.</h3><p>Project examples will be shared with client details protected.</p></div>
+      <p class="fine-print">Prices are indicative and depend on the brief, complexity and revisions. I quote custom projects on request. Printing, domain, hosting and ongoing maintenance can be quoted separately.</p>
     </section>
-    <section class="contact section freelance-contact">
-      <div class="section-label"><span>02 / WORK TOGETHER</span><span>GET IN TOUCH</span></div>
-      <h2>HAVE AN IDEA?<br><em>LET'S TALK.</em></h2>
-      <p>To request a project or a 15-minute meeting, pay the ₹10 deposit by UPI, then complete the appropriate form with your transaction reference. Each request is reviewed manually; meeting times are not confirmed until I reply.</p>
-      <p>UPI ID: <strong>7905613841@kotakbank</strong> · Confirm the recipient in your UPI app before paying.</p>
-      <div class="request-actions">
-        <a class="button light" href="upi://pay?pa=7905613841%40kotakbank&amp;pn=Arshad%20Siddiqui&amp;am=10.00&amp;cu=INR&amp;tn=Portfolio%20request">PAY ₹10 WITH UPI <span aria-hidden="true">↗</span></a>
-        <a class="button light" href="https://docs.google.com/forms/d/e/1FAIpQLSe_DiUpCImEnojYiLGtkWuIds8uEaWgAtvQnEulRSrrN52GyA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">REQUEST A PROJECT <span aria-hidden="true">↗</span></a>
-        <a class="button light" href="https://docs.google.com/forms/d/e/1FAIpQLSfhErw7_Btnx0k1fu-Rmc5-YOOyW2PBNOAW4xqXbjTUKC-3Kw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">REQUEST A MEETING <span aria-hidden="true">↗</span></a>
-      </div>
-      <p class="request-note">I will email you within 7 calendar days after receiving your completed request and payment. The deposit is credited toward your project fee. If I cannot accept your request or do not email within 7 days, the ₹10 will be refunded. Payment and refunds are handled manually. <a href="mailto:arshadid135@gmail.com">Email me</a> with questions.</p>
-      <div class="contact-links"><a href="index.html">← BACK TO PORTFOLIO</a><a href="https://www.linkedin.com/in/arshad-siddiqui-284048225/" target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a></div>
+    <section class="wrap sub-section" id="booking"><div class="split-heading"><h2>Booking</h2><p>Request a project or a 15-minute meeting. I review each request manually and confirm meeting times by email.</p></div>
+      <div class="booking-steps"><div><h3>Pay the ₹10 deposit</h3><p>Confirm the recipient in your UPI app before paying. Keep your transaction reference for the form.</p>
+        <p class="upi-id">UPI ID <strong>7905613841@kotakbank</strong></p><a class="button" href="upi://pay?pa=7905613841%40kotakbank&amp;pn=Arshad%20Siddiqui&amp;am=10.00&amp;cu=INR&amp;tn=Portfolio%20request">Pay ₹10 with UPI <span aria-hidden="true">↗</span></a></div>
+        <div><h3>Send your request</h3><p>Complete the relevant form with your transaction reference and details about the project or meeting.</p>
+        <div class="actions"><a class="button primary" href="https://docs.google.com/forms/d/e/1FAIpQLSe_DiUpCImEnojYiLGtkWuIds8uEaWgAtvQnEulRSrrN52GyA/viewform?usp=publish-editor">Request a project <span aria-hidden="true">↗</span></a><a class="button" href="https://docs.google.com/forms/d/e/1FAIpQLSfhErw7_Btnx0k1fu-Rmc5-YOOyW2PBNOAW4xqXbjTUKC-3Kw/viewform?usp=publish-editor">Request a meeting <span aria-hidden="true">↗</span></a></div></div></div>
+      <p class="terms">I will email you within 7 calendar days after receiving your completed request and payment. The deposit is credited toward your project fee. If I cannot accept your request or do not email within 7 days, the ₹10 will be refunded. I handle payments and refunds manually.</p>
+      <div class="links"><a class="text-link" href="mailto:arshadid135@gmail.com">Email me <span aria-hidden="true">↗</span></a><a class="text-link" href="https://www.linkedin.com/in/arshad-siddiqui-284048225/">LinkedIn <span aria-hidden="true">↗</span></a></div>
     </section>
   </main>
-  <footer><span>© 2026 MOHAMMAD ARSHAD SIDDIQUI</span><a href="index.html">BACK TO HOME ↑</a></footer>
+  <footer class="wrap site-footer">
+    <small>© 2026 Mohammad Arshad Siddiqui</small>
+    <div><a href="recommendations.html">Recommendations</a><a href="#top">Back to top <span aria-hidden="true">↑</span></a></div>
+  </footer>
 </body>
 </html>

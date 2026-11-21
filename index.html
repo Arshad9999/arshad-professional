@@ -1,88 +1,139 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The portfolio of Mohammad Arshad Siddiqui, an M.Tech CSE student working across AI, data and software development.">
-  <meta name="theme-color" content="#ffffff">
-  <title>Arshad Siddiqui — AI, Data & Software</title>
+  <meta name="theme-color" content="#111219">
+  <meta name="description" content="Engineering projects, research, professional experience and freelance services by Arshad Siddiqui.">
+  <title>Arshad Siddiqui — Software, applied AI and digital operations</title>
+  <link rel="icon" href="assets/icon.png">
   <link rel="stylesheet" href="styles.css">
+  <script src="site.js" defer></script>
+  <script src="art.js" defer></script>
 </head>
-<body>
+<body class="home-page" id="top">
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site-header">
-    <a class="wordmark" href="#top" aria-label="Arshad Siddiqui, home">ARSHAD<span>.</span></a>
-    <nav aria-label="Main navigation">
-      <a href="#about">About</a><a href="#work">Selected work</a><a href="freelance.html">Freelance</a><a href="recommendations.html">Recommendations</a><a href="#journey">Journey</a><a href="#credentials">Credentials</a><a href="#contact">Contact <span>↗</span></a>
-    </nav>
+  <header class="masthead">
+    <div class="wrap mast-inner">
+      <a class="brand" href="#top" aria-label="Arshad Siddiqui, home"><span class="brand-mark" aria-hidden="true">as</span> Arshad Siddiqui</a>
+      <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="primary-nav" hidden>Menu <span class="hamburger" aria-hidden="true"></span></button>
+      <nav id="primary-nav" aria-label="Main navigation">
+        <a href="#work">Work</a>
+        <a href="#research">Research</a>
+        <a href="#experience">Experience</a>
+        <a href="freelance.html">Freelance</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="nav-contact">Contact <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
   </header>
   <main id="main">
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero-image"><img src="arshad.jpeg" alt="Arshad Siddiqui at Bharat Mandapam in New Delhi"></div>
-      <div class="hero-shade"></div>
-      <div class="hero-content">
-        <p class="eyebrow"><span class="dot"></span> PORTFOLIO / LUCKNOW, INDIA</p>
-        <h1 id="hero-title">MOHAMMAD<br><span>ARSHAD</span><br>SIDDIQUI<span class="period">.</span></h1>
-        <p class="hero-intro">Building at the intersection of <strong>AI, data &amp; software.</strong></p>
-        <a class="button" href="#work">EXPLORE MY WORK <span aria-hidden="true">↗</span></a>
-      </div>
-      <div class="hero-index" aria-hidden="true"><span>01 / 05</span><span>SCROLL TO EXPLORE ↓</span></div>
-    </section>
-
-    <section class="intro section" id="about">
-      <div class="section-label"><span>01 / THE PERSON</span><span>ABOUT</span></div>
-      <div class="intro-grid">
-        <h2>CURIOUS BY NATURE.<br><em>ENGINEER</em> BY PRACTICE.</h2>
-        <div class="intro-copy">
-          <p>I'm an M.Tech Computer Science student at the Centre for Advanced Studies, AKTU, and a B.Tech graduate in CSE &amp; AI. I enjoy turning ideas into useful software and exploring what data can reveal.</p>
-          <p>My work spans machine learning, full-stack development, cloud and networking—with a particular interest in practical, human-centered applications.</p>
-          <p>I also freelance on resumes, business materials, posters and websites.</p>
-          <a class="text-link" href="mailto:arshadid135@gmail.com">LET'S CONNECT <span>↗</span></a>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="location"><span class="locator" aria-hidden="true"></span> Lucknow, India</p>
+          <h1 id="hero-title">Arshad<br><span>Siddiqui</span></h1>
+          <p class="discipline">Software development, applied AI and digital operations.</p>
+          <p class="intro">I’m pursuing an M.Tech in Computer Science and work across software projects, applied research and digital operations for a local business.</p>
+          <div class="actions"><a class="button primary" href="#work">View selected work <span aria-hidden="true">↓</span></a><a class="button" href="#experience">View experience <span aria-hidden="true">→</span></a></div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <img class="monogram" src="assets/monogram.webp" width="1240" height="840" alt="" fetchpriority="high">
+          <canvas class="formation" width="620" height="420"></canvas>
         </div>
       </div>
-      <div class="skills" aria-label="Core skills"><span>PYTHON</span><span>MACHINE LEARNING</span><span>SQL</span><span>REACT</span><span>GOOGLE CLOUD</span><span>JAVA</span><span>DEVOPS</span></div>
+      <div class="wrap hero-foot"><div><a class="text-link" href="https://github.com/Arshad9999">GitHub <span aria-hidden="true">↗</span></a><a class="text-link" href="https://www.linkedin.com/in/arshad-siddiqui-284048225/">LinkedIn <span aria-hidden="true">↗</span></a></div><span class="technical-line" aria-hidden="true"></span></div>
     </section>
-
-    <section class="work section" id="work">
-      <div class="section-label"><span>02 / SELECTED WORK</span><span>PROJECTS</span></div>
-      <div class="section-heading"><h2>IDEAS IN<br><em>MOTION.</em></h2><p>A selection of projects exploring intelligent systems, healthcare, networks and the web.</p></div>
-      <div class="project-list">
-        <article class="project"><div class="project-number">01</div><div><p class="project-type">AI / SUPPLY CHAIN</p><h3>AI-ENABLED<br>LOGISTICS OPTIMIZER</h3></div><p>Exploring resource allocation and supply-chain optimization for a Smart India Hackathon problem associated with the Ministry of Steel.</p></article>
-        <article class="project"><div class="project-number">02</div><div><p class="project-type">MACHINE LEARNING / HEALTHCARE</p><h3>HEALTHCARE<br>PREDICTION MODELS</h3></div><p>Machine learning classification projects exploring Parkinson's and heart disease prediction through healthcare data.</p></article>
-        <article class="project"><div class="project-number">03</div><div><p class="project-type">NETWORKING / SECURITY</p><h3>CONNECTX<br>OFFLINE MESH NETWORK</h3></div><p>A portable networking concept designed to connect users without cellular coverage. A Kavach 2023 finalist project.</p></article>
-        <article class="project"><div class="project-number">04</div><div><p class="project-type">FRONT-END / WEB</p><h3>MOVIE BROWSING<br>LEARNING PROJECT</h3></div><p>A forked React and Redux project with a movie catalog and Firebase sign-in screens.<br><a class="text-link" href="https://github.com/Arshad9999/netflix2.0" target="_blank" rel="noopener noreferrer">VIEW PROJECT <span aria-hidden="true">↗</span></a></p></article>
-      </div>
-      <a class="text-link work-link" href="https://github.com/Arshad9999" target="_blank" rel="noopener noreferrer">EXPLORE GITHUB <span>↗</span></a>
-      <div class="freelance-callout"><div><p class="project-type">DESIGN / WEB / FREELANCE</p><h3>CREATIVE WORK FOR REAL PEOPLE.</h3><p>From professional resumes and business cards to posters and websites.</p></div><a class="button" href="freelance.html">EXPLORE FREELANCE WORK <span aria-hidden="true">↗</span></a></div>
-    </section>
-
-    <section class="journey section" id="journey">
-      <div class="section-label"><span>03 / THE JOURNEY</span><span>EXPERIENCE</span></div>
-      <div class="journey-grid"><div><h2>ALWAYS<br><em>LEARNING.</em></h2><p class="journey-lead">A foundation built through study, collaboration and hands-on work.</p></div>
-        <div class="timeline">
-          <div class="timeline-item"><span>EXPECTED 2027</span><div><h3>M.TECH, COMPUTER SCIENCE</h3><p>Centre for Advanced Studies, AKTU</p></div></div>
-          <div class="timeline-item"><span>2024 — 2025</span><div><h3>DATA ANALYST</h3><p>Era University, Lucknow</p></div></div>
-          <div class="timeline-item"><span>2024 — 2025</span><div><h3>INNOVATION THINK TANK FELLOWSHIP</h3><p>Siemens Healthineers, Lucknow</p></div></div>
-          <div class="timeline-item"><span>2023</span><div><h3>NETWORK &amp; JAVA INTERNSHIPS</h3><p>RailTel Corporation of India · InternPe</p></div></div>
-          <div class="timeline-item"><span>2020 — 2024</span><div><h3>B.TECH, CSE &amp; AI</h3><p>Amity University, Lucknow</p></div></div>
+    <div class="work-research">
+      <div class="ribbon-lane" aria-hidden="true"><div class="ribbon-pin"><img src="assets/ribbon.webp" alt="" width="600" height="400" loading="lazy"><canvas width="600" height="400"></canvas></div></div>
+      <section class="wrap work" id="work" aria-labelledby="work-title">
+        <div class="section-head"><div><p class="section-kicker">Engineering</p><h2 id="work-title">Selected work</h2></div>
+          <div class="gallery-controls" hidden><button type="button" data-step="-1" aria-label="Previous project">←</button><button type="button" data-step="1" aria-label="Next project">→</button></div>
         </div>
+        <div class="gallery" role="region" aria-label="Selected engineering projects">
+          <article class="project-card">
+            <img class="project-art" src="assets/jaalnetra.webp" width="1080" height="432" loading="lazy" alt="">
+            <div class="project-copy">
+              <p class="meta">Network security</p>
+              <h3>JaalNetra</h3>
+              <p>I worked with the Kavach 2023 national finalist team on mesh network app detection. I later repaired the public project site, which hosts our documentation and screenshots.</p>
+              <a class="text-link" href="https://github.com/Arshad9999/JaalNetra">View project materials <span aria-hidden="true">↗</span></a>
+            </div>
+            <button type="button" class="select-card" aria-label="Select JaalNetra" hidden></button>
+          </article>
+          <article class="project-card">
+            <img class="project-art" src="assets/course-companion.webp" width="1080" height="432" loading="lazy" alt="">
+            <div class="project-copy">
+              <p class="meta">Web development</p>
+              <h3>CAS course companion</h3>
+              <p>I organised the M.Tech Computer Science syllabus into a semester-by-semester study site, with subject pages, notes and links to course materials.</p>
+              <a class="text-link" href="https://arshad9999.github.io/MTech-Cse-CAS-Course/">Visit course site <span aria-hidden="true">↗</span></a>
+            </div>
+            <button type="button" class="select-card" aria-label="Select CAS course companion" hidden></button>
+          </article>
+          <article class="project-card">
+            <img class="project-art" src="assets/movie-browser.webp" width="1080" height="432" loading="lazy" alt="">
+            <div class="project-copy">
+              <p class="meta">React · Redux</p>
+              <h3>Movie browser</h3>
+              <p>I maintain a fork of a movie-browsing frontend. I updated the app configuration and added tests for the catalogue and sign-in setup.</p>
+              <a class="text-link" href="https://github.com/Arshad9999/netflix2.0">View fork on GitHub <span aria-hidden="true">↗</span></a>
+            </div>
+            <button type="button" class="select-card" aria-label="Select Movie browser" hidden></button>
+          </article>
+        </div>
+        <p class="sr-only gallery-status" aria-live="polite" aria-atomic="true"></p>
+        <details class="earlier"><summary>Earlier project work</summary><p>I explored resource allocation for a Ministry of Steel supply-chain problem in the Smart India Hackathon, and machine learning classification for Parkinson’s and heart disease prediction.</p></details>
+      </section>
+      <section class="research wrap" id="research">
+        <div class="research-copy"><h2>Research</h2>
+          <p class="lead">My current research explores applied machine learning for privacy-conscious security applications, with an interest in how detection can work directly on a user’s device.</p>
+          <div class="planned"><h3>Planned simulation</h3><p>I’m planning a visual simulation of how devices connect and relay messages across a mesh network.</p></div>
+        </div>
+      </section>
+    </div>
+    <section class="experience section" id="experience">
+      <div class="wrap"><span id="journey"></span><h2>Experience</h2>
+        <article class="role">
+          <div class="role-date"><span class="meta">March 2025 – Present</span></div>
+          <div><h3>Digital Marketing &amp; Creative Operations Specialist (Part-time)</h3>
+            <p class="employer">Zeva Makeup Studio · Lucknow, India</p>
+            <p>I began working with the studio under its former name, MakeOver by Zeva.</p>
+            <dl class="scope">
+              <div><dt>Brand and campaign materials</dt><dd>I design business cards, loyalty cards, service menus, grand-opening invitations, promotional posters and event banners.</dd></div>
+              <div><dt>Website and search</dt><dd>I manage the website, update services and content, maintain enquiry forms and work on SEO.</dd></div>
+              <div><dt>Social media</dt><dd>I manage accounts and content across Instagram, Facebook, LinkedIn and YouTube.</dd></div>
+              <div><dt>Digital operations</dt><dd>I manage form responses, maintain Excel trackers, prepare documents and support the owner’s routine online work.</dd></div>
+            </dl>
+          </div>
+        </article>
+        <div class="history">
+          <div><span class="meta">2024 – 2025</span><div><h3>Data Analyst</h3><p>Era University, Lucknow</p></div></div>
+          <div><span class="meta">2024 – 2025</span><div><h3>Innovation Think Tank Fellowship</h3><p>Siemens Healthineers, Lucknow</p></div></div>
+          <div><span class="meta">2023</span><div><h3>Network &amp; Java internships</h3><p>RailTel Corporation of India · InternPe</p></div></div>
+        </div>
+        <div class="freelance-band"><div><h3>Freelance</h3><p>Websites, print materials and documents for individuals and businesses.</p></div><a class="button" href="freelance.html">Services &amp; pricing <span aria-hidden="true">→</span></a></div>
       </div>
-      <div class="recognition"><span>RECOGNITION</span><p>Innovation Think Tank Capacity Building Program winner <b> / </b> Kavach Cybersecurity Hackathon finalist</p></div>
     </section>
-    <section class="credentials section" id="credentials">
-      <div class="section-label"><span>04 / CONTINUING TO GROW</span><span>ACHIEVEMENTS &amp; CERTIFICATIONS</span></div>
-      <div class="credentials-intro"><h2>THE WORK<br><em>BEHIND THE WORK.</em></h2><p>Recognition, leadership and learning from across my journey.</p></div>
-      <div class="credentials-grid">
-        <div><h3>ACHIEVEMENTS &amp; LEADERSHIP</h3><ul class="credential-list">
-          <li><strong>1st runner-up</strong><span>National Kavach Cybersecurity Hackathon 2023</span></li>
+    <section class="section about" id="about"><div class="wrap">
+      <div class="bio"><div><h2>About</h2><h3>Mohammad Arshad Siddiqui</h3>
+        <p>I’m pursuing an M.Tech in Computer Science at the Centre for Advanced Studies, AKTU, after a B.Tech in Computer Science &amp; Artificial Intelligence at Amity University.</p>
+        <p>My interests include applied machine learning, cybersecurity, privacy-conscious computing and software development.</p>
+        <p class="tools-list">Python · SQL · React · Java · Google Cloud · DevOps</p>
+        <p class="meta">B.Tech 2020 – 2024 · M.Tech expected 2027</p></div>
+        <img src="arshad.jpeg" alt="Arshad Siddiqui at Bharat Mandapam in New Delhi" width="320" height="340" loading="lazy">
+      </div>
+      <div class="credentials" id="credentials"><h3>Credentials</h3>
+        <details><summary>Achievements &amp; leadership</summary><ul class="credential-list">
+          <li><strong>National finalist, team project</strong><span>National Kavach Cybersecurity Hackathon 2023</span></li>
           <li><strong>Winner</strong><span>Innovation Think Tank Capacity Building Program 2024 · Siemens Healthineers Global &amp; Era University</span></li>
           <li><strong>2nd runner-up</strong><span>WRO Olympiad · WRO Hellas &amp; Regional Science City</span></li>
           <li><strong>Alumni representative</strong><span>Invited guest of honor at Amity University Convocation</span></li>
           <li><strong>Participant</strong><span>INDIA AI Pre-Summit Engagement 2026</span></li>
           <li><strong>Campus head coordinator</strong><span>Regional Science City, Lucknow campus</span></li>
           <li><strong>Assistant to Dr. Sudhir Srivastava</strong><span>CAS-AKTU, Lucknow</span></li>
-        </ul></div>
-        <div><h3>CERTIFICATIONS</h3><p class="credentials-note">Links open the course or program pages.</p><ul class="credential-list certifications">
+        </ul></details>
+        <details><summary>Courses &amp; certifications</summary><p>These links open the provider’s course or programme page.</p><ul class="credential-list certifications">
           <li><a href="https://www.coursera.org/professional-certificates/google-data-analytics" target="_blank" rel="noopener noreferrer"><strong>Google Data Analytics Specialization</strong><span>Google &amp; Coursera ↗</span></a></li>
           <li><a href="https://www.coursera.org/professional-certificates/ibm-data-science" target="_blank" rel="noopener noreferrer"><strong>IBM Data Science</strong><span>IBM &amp; Coursera ↗</span></a></li>
           <li><a href="https://www.coursera.org/professional-certificates/meta-front-end-developer" target="_blank" rel="noopener noreferrer"><strong>Meta Front-End Developer</strong><span>Meta &amp; Coursera ↗</span></a></li>
@@ -91,18 +142,18 @@
           <li><a href="https://www.coursera.org/specializations/python-3-programming" target="_blank" rel="noopener noreferrer"><strong>Python 3 Programming Specialization</strong><span>University of Michigan &amp; Coursera ↗</span></a></li>
           <li><a href="https://codered.eccouncil.org/course/ethical-hacking-essentials" target="_blank" rel="noopener noreferrer"><strong>Ethical Hacking Essentials</strong><span>EC-Council ↗</span></a></li>
           <li><a href="https://www.netacad.com/courses/os-it/ndg-linux-essentials" target="_blank" rel="noopener noreferrer"><strong>Linux Training — NDG Linux Essentials</strong><span>Cisco Networking Academy ↗</span></a></li>
-        </ul></div>
+        </ul></details>
       </div>
-    </section>
-    <section class="contact section" id="contact">
-      <div class="section-label"><span>05 / WHAT'S NEXT</span><span>GET IN TOUCH</span></div>
-      <p class="eyebrow">OPEN TO MEANINGFUL OPPORTUNITIES</p>
-      <h2>LET'S BUILD<br><em>SOMETHING</em><br>THAT MATTERS<span>.</span></h2>
-      <a class="button light" href="mailto:arshadid135@gmail.com">SAY HELLO <span aria-hidden="true">↗</span></a>
-      <div class="feedback"><div><p class="feedback-label">HAVE AN IDEA OR FEEDBACK?</p><p>Tell me about yourself and share your thoughts on the site.</p></div><a class="text-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdee4cFiQqP_PG-kN9KWzv3sLzrkK9yNofzLFvuTc5yZTrLYQ/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">OPEN GOOGLE FORM <span aria-hidden="true">↗</span></a></div>
-      <div class="contact-links"><a href="https://www.linkedin.com/in/arshad-siddiqui-284048225/" target="_blank" rel="noopener noreferrer">LINKEDIN ↗</a><a href="https://github.com/Arshad9999" target="_blank" rel="noopener noreferrer">GITHUB ↗</a><a href="mailto:arshadid135@gmail.com">EMAIL ↗</a></div>
-    </section>
+    </div></section>
+    <section class="section contact" id="contact"><div class="wrap contact-grid">
+      <div><h2>Contact</h2><p>For engineering opportunities, research conversations or freelance enquiries, email me directly.</p></div>
+      <div><a class="email" href="mailto:arshadid135@gmail.com">arshadid135@gmail.com <span aria-hidden="true">↗</span></a>
+      <div class="links"><a class="text-link" href="https://www.linkedin.com/in/arshad-siddiqui-284048225/">LinkedIn <span aria-hidden="true">↗</span></a><a class="text-link" href="https://github.com/Arshad9999">GitHub <span aria-hidden="true">↗</span></a><a class="text-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdee4cFiQqP_PG-kN9KWzv3sLzrkK9yNofzLFvuTc5yZTrLYQ/viewform?usp=publish-editor">Portfolio feedback <span aria-hidden="true">↗</span></a></div></div>
+    </div></section>
   </main>
-  <footer><span>© 2026 MOHAMMAD ARSHAD SIDDIQUI</span><a href="#top">BACK TO TOP ↑</a></footer>
+  <footer class="wrap site-footer">
+    <small>© 2026 Mohammad Arshad Siddiqui</small>
+    <div><a href="recommendations.html">Recommendations</a><a href="#top">Back to top <span aria-hidden="true">↑</span></a></div>
+  </footer>
 </body>
 </html>

@@ -166,3 +166,124 @@ function setupArtwork() {
   resetTiming();
 }
 setupArtwork();
+
+function setupContours(hero) {
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+  function centre() {
+    hero.style.removeProperty('--contour-x');
+    hero.style.removeProperty('--contour-y');
+  }
+  hero.addEventListener('pointermove', event => {
+    if (!finePointer.matches || event.pointerType === 'touch') return;
+    const box = hero.getBoundingClientRect();
+    hero.style.setProperty('--contour-x', ((event.clientX - box.left) / box.width - .5) * 24 + 'px');
+    hero.style.setProperty('--contour-y', ((event.clientY - box.top) / box.height - .5) * 18 + 'px');
+  }, {passive: true});
+  hero.addEventListener('pointerleave', centre);
+  finePointer.addEventListener('change', centre);
+}
+
+function setupPortrait(portrait) {
+  const image = portrait.querySelector('img');
+  const canvas = portrait.querySelector('canvas');
+  const trigger = portrait.querySelector('button');
+  const context = canvas.getContext('2d');
+  if (!context || !('IntersectionObserver' in window)) return;
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  const tileSize = 9;
+  const source = document.createElement('canvas');
+  const sourceContext = source.getContext('2d');
+  if (!sourceContext) return;
+  let tiles = [], width = 0, height = 0, ratio = 1;
+  let progress = 0, target = 0, frame = 0, previousTime = 0, timer = 0;
+  let visible = false, hovering = false;
+
+  function reset() {
+    cancelAnimationFrame(frame);
+    clearTimeout(timer);
+    frame = previousTime = progress = target = 0;
+    hovering = false;
+    canvas.hidden = true;
+    portrait.classList.remove('scattering');
+  }
+  function prepare() {
+    width = portrait.clientWidth;
+    height = portrait.clientHeight;
+    if (!width || !height || !image.naturalWidth) return false;
+    ratio = Math.min(devicePixelRatio || 1, 2);
+    canvas.width = source.width = Math.round(width * ratio);
+    canvas.height = source.height = Math.round(height * ratio);
+    const cover = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+    const w = image.naturalWidth * cover, h = image.naturalHeight * cover;
+    sourceContext.setTransform(ratio,0,0,ratio,0,0);
+    sourceContext.drawImage(image,(width-w)*.5,(height-h)*.43,w,h);
+    context.setTransform(ratio,0,0,ratio,0,0);
+    tiles = [];
+    for (let y = 0; y < height; y += tileSize) {
+      for (let x = 0; x < width; x += tileSize) {
+        const angle = Math.atan2(y - height * .48, x - width * .5);
+        const seed = Math.sin(x * 2.91 + y * 8.17) * 43758.55;
+        const noise = seed - Math.floor(seed);
+        const direction = angle + (noise - .5) * 1.7;
+        const distance = (6 + 57 * noise) * width / 300;
+        tiles.push({x, y, dx: Math.cos(direction)*distance, dy: Math.sin(direction)*distance,
+          w: Math.min(tileSize, width-x), h: Math.min(tileSize, height-y), noise});
+      }
+    }
+    return true;
+  }
+  function draw(time) {
+    frame = 0;
+    const step = Math.min(time - (previousTime || time - 16), 40) / 480;
+    previousTime = time;
+    progress += Math.sign(target-progress) * Math.min(Math.abs(target-progress),step);
+    if (progress <= 0) { reset(); return; }
+    const t = progress * progress * (3 - 2 * progress);
+    context.clearRect(0,0,width,height);
+    for (const tile of tiles) {
+      const size = 1 - t * (.16 + .38 * tile.noise);
+      context.drawImage(source,tile.x*ratio,tile.y*ratio,tile.w*ratio,tile.h*ratio,
+        tile.x+t*tile.dx,tile.y+t*tile.dy,tile.w*size,tile.h*size);
+    }
+    canvas.hidden = false;
+    portrait.classList.add('scattering');
+    if (progress !== target) frame = requestAnimationFrame(draw);
+    else previousTime = 0;
+  }
+  function move(value) {
+    if (still.matches || document.hidden || !visible || !image.naturalWidth) return;
+    if (!progress && !frame && value && !prepare()) return;
+    target = value;
+    if (!frame && target !== progress) frame = requestAnimationFrame(draw);
+  }
+  function availability() {
+    reset();
+    trigger.hidden = still.matches || !image.naturalWidth;
+  }
+  trigger.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'touch') return;
+    hovering = true;
+    move(1);
+  });
+  trigger.addEventListener('pointerleave', event => {
+    if (event.pointerType === 'touch') return;
+    hovering = false;
+    move(0);
+  });
+  trigger.addEventListener('click', () => {
+    clearTimeout(timer);
+    move(1);
+    timer = setTimeout(() => { if (!hovering) move(0); }, 750);
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) reset(); });
+  window.addEventListener('resize',reset);
+  new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    if (!visible) reset();
+  }).observe(portrait);
+  image.addEventListener('load',availability);
+  still.addEventListener('change',availability);
+  availability();
+}
+setupContours(document.querySelector('.hero'));
+setupPortrait(document.querySelector('.portrait'));

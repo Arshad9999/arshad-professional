@@ -49,7 +49,14 @@ p, dd { color: var(--body); }
   background: radial-gradient(ellipse at 73% 48%, #28233a 0%, transparent 48%), linear-gradient(120deg,#121319 10%,#181720 65%,#151723 100%);
   position: relative; overflow: clip;
 }
-.hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(#8c89a333 .7px,transparent .8px); background-size: 17px 17px; mask-image: linear-gradient(92deg,transparent 20%,#0009 73%,transparent); }
+/* A static contour map stays visible when motion is reduced or scripts are unavailable. */
+.hero::before {
+  content: ""; position: absolute; inset: -18px; pointer-events: none;
+  background: url("assets/contours.webp") 68% center / cover no-repeat;
+  mask-image: linear-gradient(98deg, #0003 0%, #0002 32%, #000b 70%, #000e);
+  transform: translate(var(--contour-x, 0px), var(--contour-y, 0px));
+  transition: transform .6s ease-out;
+}
 .hero-inner { display: grid; grid-template-columns: 1fr 1fr; align-items: center; position: relative; padding-block: clamp(42px,4.8vw,74px) clamp(32px,3.5vw,58px); }
 .hero-copy { z-index: 1; }
 .location, .meta, .section-kicker, .rec-tag { font: 500 11px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .105em; color: var(--quiet); }
@@ -126,7 +133,14 @@ details p { padding: 0 0 15px; }
 .bio { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,.66fr); gap: clamp(24px,8vw,125px); align-items: center; }
 .bio h3 { margin: 24px 0 12px; }
 .bio p { max-width: 650px; margin-top: 11px; }
-.bio img { justify-self: end; width: min(100%,300px); height: clamp(215px,22vw,305px); object-fit: cover; object-position: 50% 43%; border-radius: 8px; }
+.portrait { position: relative; justify-self: end; width: min(100%,300px); height: clamp(215px,22vw,305px); }
+.portrait img, .portrait canvas, .portrait button { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 8px; }
+.portrait img { object-fit: cover; object-position: 50% 43%; }
+.portrait button { border: 0; background: transparent; padding: 0; }
+.portrait.scattering img { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .hero::before { transform: none; transition: none; }
+}
 .bio .tools-list { color: #d6ccdf; margin-top: 20px; }
 .credentials { margin-top: 48px; }
 .credentials h3 { margin-bottom: 18px; }
@@ -208,6 +222,7 @@ details p { padding: 0 0 15px; }
   :root { --gutter: 20px; }
   .hero-inner { display: block; padding: 32px 0 23px; }
   .hero h1 { font-size: clamp(53px,12.7vw,77px); margin: 17px 0 18px; }
+  .hero::before { mask-image: linear-gradient(162deg,#000b,#0002 47%,#0005); }
   .hero-art { position: absolute; right: -9px; top: 31px; width: 45%; max-width: 225px; margin: 0; }
   .hero-copy { position: relative; }
   .discipline { font-size: 19px; max-width: 400px; }
@@ -228,7 +243,7 @@ details p { padding: 0 0 15px; }
   .scope, .role, .history > div, .bio, .credential-list, .contact-grid, .split-heading, .booking-steps { grid-template-columns: 1fr; gap: 15px; }
   .history > div { gap: 6px; }
   .freelance-band, .site-footer, .rec-heading { flex-direction: column; align-items: flex-start; }
-  .bio img { justify-self: start; height: 210px; max-width: 250px; }
+  .portrait { justify-self: start; height: 210px; max-width: 250px; }
   .booking-steps { gap: 26px; }
   .service { flex-direction: column; gap: 6px; }
   .links { gap: 16px; }

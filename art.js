@@ -167,123 +167,227 @@ function setupArtwork() {
 }
 setupArtwork();
 
-function setupContours(hero) {
-  const finePointer = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
-  function centre() {
-    hero.style.removeProperty('--contour-x');
-    hero.style.removeProperty('--contour-y');
+// Both fields attract on hover, repel while pressed and relax to their original image.
+function bindGravity(surface, image, paint, restore, button) {
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  let frame = 0, last = 0, timer = 0, visible = true;
+  let target = 0, force = 0, velocity = 0, x = 0, y = 0, aimX = 0, aimY = 0;
+  let pressed = false, active = false;
+
+  function reset() {
+    cancelAnimationFrame(frame);
+    clearTimeout(timer);
+    frame = last = force = target = velocity = 0;
+    pressed = active = false;
+    restore();
   }
-  hero.addEventListener('pointermove', event => {
-    if (!finePointer.matches || event.pointerType === 'touch') return;
-    const box = hero.getBoundingClientRect();
-    hero.style.setProperty('--contour-x', ((event.clientX - box.left) / box.width - .5) * 24 + 'px');
-    hero.style.setProperty('--contour-y', ((event.clientY - box.top) / box.height - .5) * 18 + 'px');
-  }, {passive: true});
-  hero.addEventListener('pointerleave', centre);
-  finePointer.addEventListener('change', centre);
+  function tick(now) {
+    frame = 0;
+    const dt = Math.min((now - (last || now - 16)) / 1000, .032);
+    last = now;
+    const follow = 1 - Math.exp(-19 * dt);
+    x += (aimX - x) * follow;
+    y += (aimY - y) * follow;
+    velocity += ((target - force) * 190 - velocity * 21) * dt;
+    force += velocity * dt;
+    const settled = Math.abs(force-target) < .003 && Math.abs(velocity) < .025 &&
+      Math.abs(x-aimX) + Math.abs(y-aimY) < .4;
+    if (settled && target === 0) { reset(); return; }
+    if (settled) { force = target; velocity = last = 0; x = aimX; y = aimY; }
+    paint(x,y,force);
+    if (!settled) frame = requestAnimationFrame(tick);
+  }
+  function drive(value, event) {
+    if (still.matches || !visible || document.hidden || !image.naturalWidth) return;
+    if (event) {
+      const bounds = surface.getBoundingClientRect();
+      aimX = event.clientX - bounds.left;
+      aimY = event.clientY - bounds.top;
+    } else if (!active) {
+      aimX = surface.clientWidth / 2;
+      aimY = surface.clientHeight / 2;
+    }
+    if (!active) { x = aimX; y = aimY; }
+    active = true;
+    target = value;
+    if (!frame) frame = requestAnimationFrame(tick);
+  }
+  function release() {
+    clearTimeout(timer);
+    drive(1);
+    timer = setTimeout(() => drive(0), 425);
+  }
+  surface.addEventListener('pointermove', e => {
+    if (!e.isPrimary || (e.pointerType === 'touch' && !pressed)) return;
+    drive(pressed ? -1.35 : 1,e);
+  }, {passive:true});
+  surface.addEventListener('pointerenter', e => {
+    if (e.isPrimary && e.pointerType !== 'touch') drive(1,e);
+  });
+  surface.addEventListener('pointerdown', e => {
+    if (!e.isPrimary || e.button !== 0 || (!button && e.target.closest('a, button'))) return;
+    clearTimeout(timer);
+    pressed = true;
+    drive(-1.35,e);
+  });
+  surface.addEventListener('pointerup', e => {
+    if (!pressed || !e.isPrimary) return;
+    pressed = false;
+    if (e.pointerType === 'touch') {
+      // Let a quick tap show the outward impulse before the rebound.
+      timer = setTimeout(release, 155);
+    } else drive(1,e);
+  });
+  surface.addEventListener('pointerleave', e => {
+    if (e.pointerType === 'touch' && !pressed) return;
+    pressed = false;
+    clearTimeout(timer);
+    if (active) drive(0);
+  });
+  surface.addEventListener('pointercancel',reset);
+  if (button) {
+    button.addEventListener('click', e => {
+      if (e.detail !== 0) return;
+      clearTimeout(timer);
+      drive(-1.35);
+      timer = setTimeout(release,280);
+    });
+  }
+  function available() {
+    reset();
+    if (button) button.hidden = still.matches || !image.naturalWidth;
+  }
+  new ResizeObserver(reset).observe(surface);
+  new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    if (!visible) reset();
+  }).observe(surface);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) reset(); });
+  still.addEventListener('change',available);
+  image.addEventListener('load',available);
+  available();
+}
+
+function setupContours(hero) {
+  const terrain = hero.querySelector('.terrain');
+  const image = terrain.querySelector('img');
+  const canvas = terrain.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const base = document.createElement('canvas');
+  const baseContext = base.getContext('2d',{willReadFrequently:true});
+  if (!baseContext) return;
+  let pixels, patch, radius, scale, previous, unreadable = false;
+
+  function prepare() {
+    scale = Math.min(devicePixelRatio, 1.5, 1800 / hero.clientWidth);
+    canvas.width = base.width = Math.round(hero.clientWidth * scale);
+    canvas.height = base.height = Math.round(hero.clientHeight * scale);
+    const cover = Math.max(base.width / image.naturalWidth,base.height / image.naturalHeight);
+    const w = image.naturalWidth * cover, h = image.naturalHeight * cover;
+    baseContext.drawImage(image,(base.width-w)*.68,(base.height-h)*.5,w,h);
+    try { pixels = baseContext.getImageData(0,0,base.width,base.height).data; }
+    catch { unreadable = true; return; } // Local-file policies can require the static map.
+    ctx.drawImage(base,0,0);
+    radius = Math.round(Math.min(175, hero.clientWidth * .32) * scale);
+    patch = ctx.createImageData(2*radius,2*radius);
+    for (let k=0; k<patch.data.length; k+=4) {
+      patch.data[k]=187; patch.data[k+1]=182; patch.data[k+2]=218;
+    }
+  }
+  function paint(x,y,force) {
+    if (unreadable) return;
+    if (!pixels || base.width !== Math.round(hero.clientWidth * scale) ||
+        base.height !== Math.round(hero.clientHeight * scale)) prepare();
+    if (!pixels || unreadable) return;
+    const cx = Math.round(x*scale), cy = Math.round(y*scale);
+    const left = cx-radius, top = cy-radius, size = radius*2;
+    if (previous) {
+      const [px,py] = previous;
+      ctx.clearRect(px,py,size,size);
+      ctx.drawImage(base,px,py,size,size,px,py,size,size);
+    }
+    // Inverse mapping draws the existing isolines through a smooth, local gravity well.
+    for (let j=Math.max(0,-top); j<Math.min(size,base.height-top); j++) {
+      const dy=j-radius;
+      for (let i=Math.max(0,-left); i<Math.min(size,base.width-left); i++) {
+        const dx=i-radius;
+        const falloff=Math.max(0,1-(dx*dx+dy*dy)/(radius*radius));
+        const warp=force*.88*falloff*falloff;
+        const sx=Math.max(0,Math.min(base.width-1,left+i+dx*warp));
+        const sy=Math.max(0,Math.min(base.height-1,top+j+dy*warp));
+        const ix=Math.floor(sx), iy=Math.floor(sy), fx=sx-ix, fy=sy-iy;
+        const a=(iy*base.width+ix)*4+3, b=ix+1<base.width?a+4:a;
+        const stride=iy+1<base.height?base.width*4:0;
+        patch.data[(j*size+i)*4+3]=(1-fy)*((1-fx)*pixels[a]+fx*pixels[b])+
+          fy*((1-fx)*pixels[a+stride]+fx*pixels[b+stride]);
+      }
+    }
+    ctx.putImageData(patch,left,top);
+    previous=[left,top];
+    canvas.hidden=false;
+    terrain.classList.add('active');
+  }
+  bindGravity(hero,image,paint,() => {
+    canvas.hidden=true;
+    terrain.classList.remove('active');
+    if (previous) { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.drawImage(base,0,0); }
+    previous=null;
+  });
 }
 
 function setupPortrait(portrait) {
   const image = portrait.querySelector('img');
   const canvas = portrait.querySelector('canvas');
-  const trigger = portrait.querySelector('button');
   const context = canvas.getContext('2d');
-  if (!context || !('IntersectionObserver' in window)) return;
-  const still = matchMedia('(prefers-reduced-motion: reduce)');
-  const tileSize = 9;
+  if (!context) return;
+  const tileSize = 4;
   const source = document.createElement('canvas');
   const sourceContext = source.getContext('2d');
   if (!sourceContext) return;
   let tiles = [], width = 0, height = 0, ratio = 1;
-  let progress = 0, target = 0, frame = 0, previousTime = 0, timer = 0;
-  let visible = false, hovering = false;
-
-  function reset() {
-    cancelAnimationFrame(frame);
-    clearTimeout(timer);
-    frame = previousTime = progress = target = 0;
-    hovering = false;
-    canvas.hidden = true;
-    portrait.classList.remove('scattering');
-  }
   function prepare() {
-    width = portrait.clientWidth;
-    height = portrait.clientHeight;
-    if (!width || !height || !image.naturalWidth) return false;
-    ratio = Math.min(devicePixelRatio || 1, 2);
-    canvas.width = source.width = Math.round(width * ratio);
-    canvas.height = source.height = Math.round(height * ratio);
-    const cover = Math.max(width / image.naturalWidth, height / image.naturalHeight);
-    const w = image.naturalWidth * cover, h = image.naturalHeight * cover;
+    width=portrait.clientWidth; height=portrait.clientHeight;
+    ratio=Math.min(devicePixelRatio,2);
+    canvas.width=source.width=Math.round(width*ratio);
+    canvas.height=source.height=Math.round(height*ratio);
+    const cover=Math.max(width/image.naturalWidth,height/image.naturalHeight);
+    const w=image.naturalWidth*cover,h=image.naturalHeight*cover;
     sourceContext.setTransform(ratio,0,0,ratio,0,0);
     sourceContext.drawImage(image,(width-w)*.5,(height-h)*.43,w,h);
     context.setTransform(ratio,0,0,ratio,0,0);
-    tiles = [];
-    for (let y = 0; y < height; y += tileSize) {
-      for (let x = 0; x < width; x += tileSize) {
-        const angle = Math.atan2(y - height * .48, x - width * .5);
-        const seed = Math.sin(x * 2.91 + y * 8.17) * 43758.55;
-        const noise = seed - Math.floor(seed);
-        const direction = angle + (noise - .5) * 1.7;
-        const distance = (6 + 57 * noise) * width / 300;
-        tiles.push({x, y, dx: Math.cos(direction)*distance, dy: Math.sin(direction)*distance,
-          w: Math.min(tileSize, width-x), h: Math.min(tileSize, height-y), noise});
-      }
+    tiles=[];
+    for(let y=0;y<height;y+=tileSize) for(let x=0;x<width;x+=tileSize) {
+      const seed=Math.sin(x*2.91+y*8.17)*43758.55;
+      const noise=seed-Math.floor(seed), angle=noise*2*Math.PI;
+      tiles.push({x,y,w:Math.min(tileSize,width-x),h:Math.min(tileSize,height-y),
+        jitterX:Math.cos(angle)*noise,jitterY:Math.sin(angle)*noise,noise});
     }
-    return true;
   }
-  function draw(time) {
-    frame = 0;
-    const step = Math.min(time - (previousTime || time - 16), 40) / 480;
-    previousTime = time;
-    progress += Math.sign(target-progress) * Math.min(Math.abs(target-progress),step);
-    if (progress <= 0) { reset(); return; }
-    const t = progress * progress * (3 - 2 * progress);
+  function paint(x,y,force) {
+    if(width!==portrait.clientWidth || height!==portrait.clientHeight) prepare();
     context.clearRect(0,0,width,height);
-    for (const tile of tiles) {
-      const size = 1 - t * (.16 + .38 * tile.noise);
+    const radius=Math.max(width,height)*.78;
+    for(const tile of tiles) {
+      const dx=x-tile.x, dy=y-tile.y;
+      const field=Math.max(0,1-(dx*dx+dy*dy)/(radius*radius));
+      const gravity=force*.9*field*field;
+      const scatter=Math.abs(force)*(.18+.82*field);
+      const jitter=(force<0?40:19)*scatter;
+      const size=1-Math.min(.74,scatter*(.28+.32*tile.noise));
       context.drawImage(source,tile.x*ratio,tile.y*ratio,tile.w*ratio,tile.h*ratio,
-        tile.x+t*tile.dx,tile.y+t*tile.dy,tile.w*size,tile.h*size);
+        tile.x+dx*gravity+tile.jitterX*jitter,tile.y+dy*gravity+tile.jitterY*jitter,
+        tile.w*size,tile.h*size);
     }
-    canvas.hidden = false;
+    canvas.hidden=false;
     portrait.classList.add('scattering');
-    if (progress !== target) frame = requestAnimationFrame(draw);
-    else previousTime = 0;
   }
-  function move(value) {
-    if (still.matches || document.hidden || !visible || !image.naturalWidth) return;
-    if (!progress && !frame && value && !prepare()) return;
-    target = value;
-    if (!frame && target !== progress) frame = requestAnimationFrame(draw);
-  }
-  function availability() {
-    reset();
-    trigger.hidden = still.matches || !image.naturalWidth;
-  }
-  trigger.addEventListener('pointerenter', event => {
-    if (event.pointerType === 'touch') return;
-    hovering = true;
-    move(1);
-  });
-  trigger.addEventListener('pointerleave', event => {
-    if (event.pointerType === 'touch') return;
-    hovering = false;
-    move(0);
-  });
-  trigger.addEventListener('click', () => {
-    clearTimeout(timer);
-    move(1);
-    timer = setTimeout(() => { if (!hovering) move(0); }, 750);
-  });
-  document.addEventListener('visibilitychange', () => { if (document.hidden) reset(); });
-  window.addEventListener('resize',reset);
-  new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
-    if (!visible) reset();
-  }).observe(portrait);
-  image.addEventListener('load',availability);
-  still.addEventListener('change',availability);
-  availability();
+  bindGravity(portrait,image,paint,() => {
+    canvas.hidden=true;
+    portrait.classList.remove('scattering');
+  },portrait.querySelector('button'));
 }
-setupContours(document.querySelector('.hero'));
-setupPortrait(document.querySelector('.portrait'));
+if ('IntersectionObserver' in window && 'ResizeObserver' in window) {
+  setupContours(document.querySelector('.hero'));
+  setupPortrait(document.querySelector('.portrait'));
+}

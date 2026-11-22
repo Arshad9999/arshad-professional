@@ -64,7 +64,7 @@ function drawRibbon(context, progress) {
 function setupArtwork() {
   const hero = document.querySelector('.hero');
   const artwork = hero.querySelector('.hero-art');
-  const monogram = artwork.querySelector('img');
+  const monogram = artwork.querySelector('.monogram');
   const mesh = artwork.querySelector('canvas');
   const meshContext = mesh.getContext('2d');
   const region = document.querySelector('.work-research');
@@ -116,6 +116,7 @@ function setupArtwork() {
       lastTime = now;
       paintMesh(clamp(elapsed / duration));
       settled = elapsed >= duration;
+      if (settled) artwork.classList.remove('forming');
     }
     const heroBox = hero.getBoundingClientRect();
     const exit = clamp(-heroBox.top / heroBox.height);
@@ -140,6 +141,7 @@ function setupArtwork() {
     lastTime = frame = 0;
     if (still.matches) {
       settled = true;
+      artwork.classList.remove('forming');
       artwork.style.opacity = monogram.style.opacity = pin.style.opacity = '1';
       mesh.style.opacity = '0';
       ribbonContext.clearRect(0,0,ribbon.width,ribbon.height);
@@ -162,10 +164,61 @@ function setupArtwork() {
   window.addEventListener('resize',queueFrame);
   document.addEventListener('visibilitychange',resetTiming);
   still.addEventListener('change',resetTiming);
-  if (!settled) paintMesh(0);
+  if (!settled) {
+    artwork.classList.add('forming');
+    paintMesh(0);
+  }
   resetTiming();
 }
 setupArtwork();
+
+// The 7 × 7 sheet follows the model's Walk animation through a camera orbit.
+function setupSpider(spider) {
+  const enabled = matchMedia('(min-width: 821px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+  const layer = spider.querySelector('.spider-frame');
+  const poses = new Image();
+  const center = 24;
+  let position = center, target = center, frame = 0, lastTime = 0;
+
+  function reset() {
+    cancelAnimationFrame(frame);
+    frame = lastTime = 0;
+    position = target = center;
+    spider.classList.remove('show-pose');
+    layer.style.backgroundImage = '';
+  }
+  function draw(now) {
+    frame = 0;
+    const dt = Math.min(64, now - (lastTime || now - 16));
+    lastTime = now;
+    position += (target - position) * (1 - Math.exp(-dt / 95));
+    if (Math.abs(target - position) < .08) position = target;
+    const index = Math.round(position);
+    layer.style.backgroundPosition = (index % 7 * 100 / 6) + '% ' + (Math.floor(index / 7) * 100 / 6) + '%';
+    spider.classList.add('show-pose');
+    if (position !== target) frame = requestAnimationFrame(draw);
+    else if (target === center) reset();
+    else lastTime = 0;
+  }
+  function queue() {
+    if (!enabled.matches || document.hidden || frame || !poses.naturalWidth || position === target) return;
+    layer.style.backgroundImage = 'url("' + spider.dataset.poses + '")';
+    frame = requestAnimationFrame(draw);
+  }
+  poses.addEventListener('load', queue);
+  spider.addEventListener('pointermove', e => {
+    if (!enabled.matches || e.pointerType === 'touch' || navigator.connection?.saveData) return;
+    const bounds = spider.getBoundingClientRect();
+    target = Math.round(48 * Math.max(0, Math.min(1, (e.clientX - bounds.left) / bounds.width)));
+    if (!poses.src) poses.src = spider.dataset.poses;
+    queue();
+  }, {passive:true});
+  spider.addEventListener('pointerleave', () => { target = center; queue(); });
+  new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) reset(); }).observe(spider);
+  enabled.addEventListener('change', reset);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) reset(); });
+}
+if ('IntersectionObserver' in window) setupSpider(document.querySelector('.spider'));
 
 // Both fields attract on hover, repel while pressed and relax to their original image.
 function bindGravity(surface, image, paint, restore, button) {

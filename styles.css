@@ -71,7 +71,18 @@ p, dd { color: var(--body); }
 .button.primary { background: #c5b4f5; border-color: #c5b4f5; color: #191625; }
 .button.primary:hover { background: #ddd0ff; }
 .hero-art { width: 114%; margin-left: -6%; position: relative; aspect-ratio: 620/420; pointer-events: none; background: url("assets/construction.webp") center/contain no-repeat; }
-.hero-art img, .hero-art canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hero-art img, .hero-art canvas, .monogram-intro, .spider, .spider-frame { position: absolute; inset: 0; width: 100%; height: 100%; }
+.monogram-intro { opacity: 0; }
+.spider-frame { background-size: 700% 700%; background-repeat: no-repeat; }
+.spider.show-pose img { visibility: hidden; }
+@media (min-width: 821px) and (prefers-reduced-motion: no-preference) {
+  .spider, .monogram-intro { transition: opacity 260ms ease-out; }
+  .hero-art.forming .monogram-intro { opacity: 1; }
+  .hero-art.forming .spider { opacity: 0; }
+}
+@media (min-width: 821px) and (hover: hover) and (pointer: fine) {
+  .spider { pointer-events: auto; }
+}
 .hero-foot { position: relative; display: flex; align-items: center; gap: 26px; padding-bottom: 22px; }
 .hero-foot > div, .links { display: flex; gap: 22px; }
 .text-link, .site-footer a { display: inline-flex; align-items: center; gap: 7px; color: var(--ice); font-weight: 540; font-size: 14px; text-decoration: none; }

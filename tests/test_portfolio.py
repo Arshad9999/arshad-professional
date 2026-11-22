@@ -18,7 +18,7 @@ class Page(HTMLParser):
         attr = dict(attrs)
         if "id" in attr:
             self.ids.append(attr["id"])
-        self.urls.extend(attr[key] for key in ("href", "src") if key in attr)
+        self.urls.extend(attr[key] for key in ("href", "src", "data-poses") if key in attr)
 
 
 class Portfolio(unittest.TestCase):

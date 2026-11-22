@@ -190,6 +190,21 @@ details p { padding: 0 0 15px; }
 .rec-links { margin-top: 15px; }
 .rec-feedback { padding: 30px 0 50px; border-top: 1px solid var(--line); }
 .rec-feedback .button { margin-top: 15px; }
+/* Keep hit areas still while directional links acknowledge a pointer. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .text-link > span[aria-hidden], .nav-contact > span[aria-hidden] {
+    transition: transform 150ms cubic-bezier(.23, 1, .32, 1);
+  }
+  :is(.text-link, .nav-contact):hover > span[aria-hidden] {
+    transform: translate(2px, -2px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .button, .gallery-controls button {
+    transition: transform 120ms cubic-bezier(.23, 1, .32, 1), background-color 120ms ease, border-color 120ms ease;
+  }
+  :is(.button, .gallery-controls button):active:not(:focus-visible) { transform: scale(.97); }
+}
 @media (min-width: 821px) {
   .gallery.ready { grid-template-columns: 1fr 1.1fr 1fr; gap: 18px; align-items: center; }
   .ready .project-card { grid-row: 1; }
